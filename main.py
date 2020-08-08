@@ -1,4 +1,5 @@
 from aiogram import Bot, types
+from aiogram.types import InlineKeyboardButton
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 
@@ -20,9 +21,14 @@ async def process_help_command(message: types.Message):
     await message.reply("Напиши мне что-нибудь, и я отпрпавлю этот текст тебе в ответ!")
 
 @dp.message_handler(commands=['catalog'])
-async def process_help_command(message: types.Message):
+async def process_help_command(msg: types.Message):
     categories = db.get_categories()
-    await bot.send_message(msg.from_user.id, msg.text)
+    keyboard = types.InlineKeyboardMarkup()
+    for cat in categories:
+        keyboard.add(
+            InlineKeyboardButton(text=cat,callback_data='azaza')
+        )
+    await bot.send_message(msg.from_user.id,'Категории:',reply_markup=keyboard)
 
 
 @dp.message_handler()
