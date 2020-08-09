@@ -56,12 +56,19 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     """Выбирает все товары из определенной категории"""
     query = callback_query.data.replace('prdct_','')
     product = db.get_product(query)
-    # keyboard = types.InlineKeyboardMarkup()
-    # keyboard.a
-    answer = ''
-    for el in product:
-        answer +=f'{el}\n'
-    await bot.send_message(callback_query.from_user.id,answer)
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        InlineKeyboardButton(
+            text='Ссылка',
+            url=product[6]
+        )
+    )
+    answer = f'Название товара:\n{product[1]}\nОписание товара:\n{product[2]}\nЦена:{product[5]}'
+    await bot.send_photo(
+        chat_id=callback_query.from_user.id,
+        caption=answer,
+        reply_markup=keyboard,
+        photo=product[3])
 
 if __name__ == '__main__':
     executor.start_polling(dp)
