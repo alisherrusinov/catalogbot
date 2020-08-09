@@ -21,6 +21,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(commands=['catalog'])
 async def process_help_command(msg: types.Message):
+    """Получение всех категорий"""
     categories = db.get_categories()
     keyboard = types.InlineKeyboardMarkup()
     for cat in categories:
@@ -49,5 +50,18 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
             )
         )
     await bot.send_message(callback_query.from_user.id,f'{query}:',reply_markup=keyboard)
+
+@dp.callback_query_handler(lambda call: call.data and call.data.startswith('prdct_'))
+async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+    """Выбирает все товары из определенной категории"""
+    query = callback_query.data.replace('prdct_','')
+    product = db.get_product(query)
+    # keyboard = types.InlineKeyboardMarkup()
+    # keyboard.a
+    answer = ''
+    for el in product:
+        answer +=f'{el}\n'
+    await bot.send_message(callback_query.from_user.id,answer)
+
 if __name__ == '__main__':
     executor.start_polling(dp)
