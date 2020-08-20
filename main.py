@@ -49,11 +49,16 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
                 callback_data=f'prdct_{product}'
             )
         )
-    await bot.send_message(callback_query.from_user.id,f'{query}:',reply_markup=keyboard)
+    await bot.edit_message_text(
+        chat_id=callback_query.from_user.id,
+        message_id=callback_query.message.message_id,
+        text=f'{query}:',
+        reply_markup=keyboard
+    )
 
 @dp.callback_query_handler(lambda call: call.data and call.data.startswith('prdct_'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    """Выбирает все товары из определенной категории"""
+    """Выбирает товар из категории"""
     query = callback_query.data.replace('prdct_','')
     product = db.get_product(query)
     keyboard = types.InlineKeyboardMarkup()
@@ -63,12 +68,13 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
             url=product[6]
         )
     )
-    answer = f'Название товара:\n{product[1]}\nОписание товара:\n{product[2]}\nЦена:{product[5]}'
+    answer = f'*Название товара*:\n{product[1]}\nОписание товара:\n{product[2]}\nЦена:{product[5]}'
     await bot.send_photo(
         chat_id=callback_query.from_user.id,
         caption=answer,
         reply_markup=keyboard,
-        photo=product[3])
+        photo=product[3],
+        parse_mode='markdown')
 
 if __name__ == '__main__':
     executor.start_polling(dp)
