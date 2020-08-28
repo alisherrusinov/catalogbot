@@ -13,14 +13,15 @@ db = DBManager()
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.reply("Привет!\nНапиши мне что-нибудь!")
+    await message.reply(
+        "Привет!\n"\
+        "Я бот через которого можно смотреть товары онлайн магазина\n"\
+        "Чтобы начать напиши: /catalog"\
+        )
 
-@dp.message_handler(commands=['help'])
-async def process_help_command(message: types.Message):
-    await message.reply("Напиши мне что-нибудь, и я отпрпавлю этот текст тебе в ответ!")
 
 @dp.message_handler(commands=['catalog'])
-async def process_help_command(msg: types.Message):
+async def get_categories_command(msg: types.Message):
     """Получение всех категорий"""
     categories = db.get_categories()
     keyboard = types.InlineKeyboardMarkup()
