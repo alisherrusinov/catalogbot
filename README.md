@@ -5,9 +5,10 @@
 ```bash
 python main.py
 ```
-![testing](https://vk.com/doc192704168_566193433)
+![testing](assetsforgithub/catalogbot.gif)
 ## Настройка:
 ```python
 #config.py
 TOKEN = 'ТОКЕН ВСТАВЛЯТЬ СЮДА'
 ```
+![database](assetsforgithub/database.jpg)
